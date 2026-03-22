@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="building_layout_page" name="Building Layout">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+                <section class="s_building_booking_hero py-5">
+                    <div class="container">
+                        <div class="row align-items-start g-4">
+                            <div class="col-lg-7">
+                                <span class="badge rounded-pill text-bg-light mb-3">Interactive Shop Layout</span>
+                                <h1 class="display-5 fw-bold">Book a meeting from the building layout</h1>
+                                <p class="lead mb-0">
+                                    Click any available shop, send your meeting request, and once your booking is confirmed
+                                    the shop changes to reserved on this page.
+                                </p>
+                            </div>
+                            <div class="col-lg-5">
+                                <div class="building-booking-legend card border-0 shadow-sm">
+                                    <div class="card-body">
+                                        <h3 class="h5 mb-3">Legend</h3>
+                                        <div class="legend-item"><span class="legend-swatch available"></span> Available</div>
+                                        <div class="legend-item"><span class="legend-swatch reserved"></span> Reserved</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="pb-5">
+                    <div class="container">
+                        <t t-if="error == 'shop_unavailable'">
+                            <div class="alert alert-warning" role="alert">
+                                That shop has already been reserved. Please choose another available shop.
+                            </div>
+                        </t>
+                        <t t-if="error == 'invalid_datetime'">
+                            <div class="alert alert-warning" role="alert">
+                                Please choose a valid meeting date and time before sending your request.
+                            </div>
+                        </t>
+                        <t t-if="success">
+                            <div class="alert alert-success" role="alert">
+                                Your booking request has been submitted. We will confirm it shortly.
+                            </div>
+                        </t>
+
+                        <div class="building-layout">
+                            <t t-foreach="layout.items()" t-as="floor_item">
+                                <div class="building-floor card border-0 shadow-sm mb-4">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h2 class="h4 mb-0">Floor <t t-out="floor_item[0]"/></h2>
+                                            <span class="text-muted">2 rows x 20 shops</span>
+                                        </div>
+                                        <t t-foreach="floor_item[1].items()" t-as="row_item">
+                                            <div class="shop-row mb-4">
+                                                <div class="shop-row-header">Row <t t-out="row_item[0]"/></div>
+                                                <div class="shop-grid">
+                                                    <t t-foreach="row_item[1]" t-as="shop">
+                                                        <button
+                                                            type="button"
+                                                            t-attf-class="shop-tile #{'is-reserved' if shop.status == 'reserved' else 'is-available'}"
+                                                            t-att-data-shop-id="shop.id"
+                                                            t-att-data-shop-name="shop.name"
+                                                            t-att-data-shop-status="shop.status"
+                                                            t-att-disabled="shop.status == 'reserved'"
+                                                        >
+                                                            <span class="shop-tile-title"><t t-out="shop.name"/></span>
+                                                            <span class="shop-tile-state"><t t-out="shop.status.title()"/></span>
+                                                        </button>
+                                                    </t>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="booking-modal" class="booking-modal" aria-hidden="true">
+                    <div class="booking-modal-backdrop" data-close-modal="1"></div>
+                    <div class="booking-modal-dialog">
+                        <button type="button" class="booking-modal-close" data-close-modal="1" aria-label="Close">x</button>
+                        <h2 class="h4 mb-2">Book a meeting</h2>
+                        <p class="text-muted mb-4">
+                            You are requesting a meeting for <strong id="booking-shop-name">this shop</strong>.
+                        </p>
+
+                        <form action="/building-layout/book" method="post" class="building-booking-form">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <input type="hidden" name="shop_id" id="booking-shop-id" t-att-value="selected_shop_id or ''"/>
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label" for="visitor_name">Full name</label>
+                                    <input id="visitor_name" name="visitor_name" type="text" class="form-control" required="required"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="visitor_email">Email</label>
+                                    <input id="visitor_email" name="visitor_email" type="email" class="form-control" required="required"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="visitor_phone">Phone</label>
+                                    <input id="visitor_phone" name="visitor_phone" type="text" class="form-control"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="company_name">Company</label>
+                                    <input id="company_name" name="company_name" type="text" class="form-control"/>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label" for="meeting_datetime">Preferred meeting date and time</label>
+                                    <input id="meeting_datetime" name="meeting_datetime" type="datetime-local" class="form-control" required="required"/>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label" for="notes">Notes</label>
+                                    <textarea id="notes" name="notes" class="form-control" rows="4"></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary w-100">Send booking request</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+
+    <record id="building_layout_menu" model="website.menu">
+        <field name="name">Shop Booking</field>
+        <field name="url">/building-layout</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence" type="int">80</field>
+    </record>
+</odoo>

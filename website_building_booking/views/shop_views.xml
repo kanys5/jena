@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_shop_booking" model="ir.sequence">
+        <field name="name">Shop Booking</field>
+        <field name="code">website_building_booking.booking</field>
+        <field name="prefix">BK</field>
+        <field name="padding">4</field>
+    </record>
+
+    <record id="view_building_shop_tree" model="ir.ui.view">
+        <field name="name">building.shop.tree</field>
+        <field name="model">building.shop</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="floor"/>
+                <field name="row_code"/>
+                <field name="shop_number"/>
+                <field name="status"/>
+                <field name="active_booking_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_building_shop_form" model="ir.ui.view">
+        <field name="name">building.shop.form</field>
+        <field name="model">building.shop</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="display_label" readonly="1"/>
+                            <field name="status" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="floor"/>
+                            <field name="row_code"/>
+                            <field name="row_name" readonly="1"/>
+                            <field name="shop_number"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Bookings">
+                            <field name="booking_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="visitor_name"/>
+                                    <field name="meeting_datetime"/>
+                                    <field name="status"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_building_shop" model="ir.actions.act_window">
+        <field name="name">Shops</field>
+        <field name="res_model">building.shop</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_building_booking_root" name="Building Booking" sequence="10"/>
+    <menuitem
+        id="menu_building_shop"
+        name="Shops"
+        parent="menu_building_booking_root"
+        action="action_building_shop"
+        sequence="10"
+    />
+</odoo>

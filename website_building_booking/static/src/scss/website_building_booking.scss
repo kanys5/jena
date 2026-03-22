@@ -1,0 +1,133 @@
+.s_building_booking_hero {
+    background:
+        radial-gradient(circle at top left, rgba(245, 199, 110, 0.35), transparent 35%),
+        linear-gradient(135deg, #16324f, #215b78);
+    color: #fff;
+}
+
+.building-booking-legend .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.legend-swatch {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 999px;
+    display: inline-block;
+}
+
+.legend-swatch.available {
+    background: #1f9d6d;
+}
+
+.legend-swatch.reserved {
+    background: #d45555;
+}
+
+.building-floor {
+    border-radius: 1.5rem;
+}
+
+.shop-row-header {
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #16324f;
+}
+
+.shop-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.9rem;
+}
+
+.shop-tile {
+    border: 0;
+    border-radius: 1rem;
+    padding: 1rem;
+    min-height: 110px;
+    text-align: left;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 10px 30px rgba(22, 50, 79, 0.08);
+}
+
+.shop-tile.is-available {
+    background: linear-gradient(180deg, #dcfff0, #bff2db);
+    color: #11523d;
+    cursor: pointer;
+}
+
+.shop-tile.is-available:hover {
+    transform: translateY(-2px);
+}
+
+.shop-tile.is-reserved {
+    background: linear-gradient(180deg, #ffe1e1, #ffc8c8);
+    color: #7c2424;
+    cursor: not-allowed;
+    opacity: 0.95;
+}
+
+.shop-tile-title,
+.shop-tile-state {
+    display: block;
+}
+
+.shop-tile-title {
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+}
+
+.booking-modal {
+    display: none;
+}
+
+.booking-modal.is-open {
+    display: block;
+}
+
+.booking-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 22, 34, 0.56);
+    z-index: 1050;
+}
+
+.booking-modal-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(100vw - 2rem);
+    max-width: 680px;
+    max-height: calc(100vh - 2rem);
+    overflow: auto;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 1.5rem;
+    z-index: 1051;
+    box-shadow: 0 20px 50px rgba(12, 25, 41, 0.18);
+}
+
+.booking-modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    border: 0;
+    background: transparent;
+    font-size: 1.2rem;
+}
+
+@media (max-width: 991.98px) {
+    .shop-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 767.98px) {
+    .shop-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
